@@ -7,11 +7,12 @@ class SupportBot:
 
     def __init__(self):
         self.support_resp = {
-            'ask_about_product': r'.*\s*product.*',
-            'technical_support': r'.*technical.*support.*',
-            'about_returns': r'.*\s*return.*policy.*',
-            'general_query': r'.*how.*help.*'
-        }
+    'ask_about_product': r'.*\b(product|item|laptop|phone|TV|tablet|camera|electronics?|devices?)\b.*',
+    'technical_support': r'.*(technical|support|help|issue|problem|trouble|not working|malfunction|repair|fix|fault).*',
+    'about_returns': r'.*\b(return|refund|exchange|replace|replacement|defective|broken|warranty)\b.*',
+    'general_query': r'.*(how.*(help|assist|support)|customer service|faq|how do i|what can i|how does this work|assist me).*'
+}
+
 
     def greet(self):
         self.name = input("Hello! Welcome to our customer support. What's your name? ")
@@ -37,7 +38,7 @@ class SupportBot:
         for intent, regex_pattern in self.support_resp.items():
             found_match = re.search(regex_pattern, reply)
             if found_match and intent == 'ask_about_product':
-                return self.ask_about_product()
+                return self.ask_about_product(reply)
             elif found_match and intent == 'technical_support':
                 return self.technical_support()
             elif found_match and intent == 'about_returns':
@@ -46,13 +47,48 @@ class SupportBot:
                 return self.general_query()
         return self.no_match_intent()
 
-    def ask_about_product(self):
-        responses = [
-            "We offer a variety of products, including electronics, apparel, and home goods.",
-            "Our product range is diverse, with something for everyone. Would you like information on a specific product?",
-            "Can you specify the product you're asking about?"
-        ]
+    def ask_about_product(self, reply):
+
+        if re.search(r'laptop', reply, re.IGNORECASE):
+            responses = [
+                "We have a variety of laptops, including models from Dell, HP, and Apple. What specific features are you looking for?",
+                "Our laptop collection includes gaming, business, and everyday use models. Would you like more details on any of these?",
+                "Looking for a laptop? We offer great deals on the latest models with powerful processors and long battery life."
+            ]
+        elif re.search(r'phone', reply, re.IGNORECASE):
+            responses = [
+                "We offer the latest smartphones, including iPhones, Samsung Galaxy, and Google Pixel. Which one are you interested in?",
+                "Our phone selection includes both Android and iOS devices. Would you like to know about any specific model?",
+                "Looking for a phone? We have a wide range of smartphones with great camera features and fast processors."
+            ]
+        elif re.search(r'TV', reply, re.IGNORECASE):
+            responses = [
+                "Our TVs range from 32-inch to 85-inch models, including 4K and smart TVs. What screen size are you looking for?",
+                "We have LED, OLED, and QLED TVs from top brands like Samsung and LG. Can I assist you in choosing one?",
+                "Looking for a new TV? Our latest models come with smart features and stunning display quality. Which brand do you prefer?"
+            ]
+        elif re.search(r'tablet', reply, re.IGNORECASE):
+            responses = [
+                "We offer a variety of tablets, including iPads, Samsung Galaxy Tabs, and Microsoft Surface devices. What are you looking for?",
+                "Need a tablet? We have models for both casual and professional use. Which one would you like to know more about?",
+                "Our tablet collection includes options for entertainment, work, and creative tasks. Can I help you with a specific model?"
+            ]
+        elif re.search(r'camera', reply, re.IGNORECASE):
+            responses = [
+                "We offer DSLR, mirrorless, and point-and-shoot cameras from top brands like Canon and Nikon. What are you looking to capture?",
+                "Our camera selection includes models for both professionals and hobbyists. Would you like recommendations?",
+                "Looking for a new camera? We have great options for photography and videography, from action cameras to DSLRs."
+            ]
+        else:
+
+            responses = [
+                "We offer a wide range of electronics, including phones, laptops, TVs, and more. Is there a specific product you're interested in?",
+                "Our product selection includes various electronic devices. Let me know if you're looking for something specific!",
+                "Can you specify which type of product you're asking about? We have phones, laptops, tablets, TVs, and more."
+            ]
+        
         return random.choice(responses)
+
 
     def technical_support(self):
         responses = [
